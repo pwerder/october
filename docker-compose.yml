@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  php-fpm:
+    build: ./docker/.
+    volumes:
+      - ./:/var/www/html
+    expose:
+      - 9000
+    networks:
+      - october-network
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx-conf:/etc/nginx/conf.d
+      - ./:/var/www/html
+    restart:  always
+    depends_on:
+      - php-fpm
+    networks:
+      - october-network
+
+networks:
+  october-network:
